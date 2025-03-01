@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../components/button_row.dart';
-import '../components/custom_tab_view.dart';
-import '../components/range_tab_bar.dart';
-import '../enums/default_tab.dart';
-import '../enums/omni_datetime_picker_type.dart';
+import 'components/button_row.dart';
+import 'components/custom_tab_view.dart';
+import 'components/range_tab_bar.dart';
 import '../omni_datetime_picker.dart';
 
-class RangePickerDialog extends StatefulWidget {
+class OmniDateTimeRangePicker extends StatefulWidget {
   final Widget? title;
   final Widget? titleSeparator;
   final Widget? separator;
@@ -19,11 +17,6 @@ class RangePickerDialog extends StatefulWidget {
   final DateTime? startFirstDate;
   final DateTime? startLastDate;
   final bool Function(DateTime)? startSelectableDayPredicate;
-  final void Function(DateTime)? onStateTimeChanged;
-  final void Function(DateTime)? onEndTimeChanged;
-
-  final void Function()? onCancelPressed;
-  final void Function(DateTime?, DateTime?)? onSavePressed;
 
   final DateTime? endInitialDate;
   final DateTime? endFirstDate;
@@ -52,7 +45,15 @@ class RangePickerDialog extends StatefulWidget {
 
   final ButtonRowBuilder? actionsBuilder;
 
-  const RangePickerDialog({
+  final void Function(DateTime)? onStateTimeChanged;
+  final void Function(DateTime)? onEndTimeChanged;
+
+  final void Function()? onCancelPressed;
+  final void Function(DateTime, DateTime)? onSavePressed;
+
+  final ThemeData? theme;
+
+  const OmniDateTimeRangePicker({
     super.key,
     this.title,
     this.titleSeparator,
@@ -81,21 +82,22 @@ class RangePickerDialog extends StatefulWidget {
     this.borderRadius,
     this.constraints,
     this.type,
-    this.onStateTimeChanged,
-    this.onEndTimeChanged,
-    this.onSavePressed,
-    this.onCancelPressed,
     bool? isForceEndDateAfterStartDate,
     this.onStartDateAfterEndDateError,
     this.defaultTab,
     this.actionsBuilder,
+    this.onStateTimeChanged,
+    this.onEndTimeChanged,
+    this.onSavePressed,
+    this.onCancelPressed,
+    this.theme,
   }) : isForceEndDateAfterStartDate = isForceEndDateAfterStartDate ?? false;
 
   @override
-  State<RangePickerDialog> createState() => _RangePickerDialogState();
+  State<OmniDateTimeRangePicker> createState() => _OmniDateTimeRangePickerState();
 }
 
-class _RangePickerDialogState extends State<RangePickerDialog> with SingleTickerProviderStateMixin {
+class _OmniDateTimeRangePickerState extends State<OmniDateTimeRangePicker> with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   DateTime? _selectedStartDateTime;
   DateTime? _selectedEndDateTime;
@@ -133,12 +135,8 @@ class _RangePickerDialogState extends State<RangePickerDialog> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHigh,
-      alignment: Alignment.center,
-      clipBehavior: Clip.hardEdge,
-      insetPadding: widget.insetPadding,
-      shape: RoundedRectangleBorder(borderRadius: widget.borderRadius ?? const BorderRadius.all(Radius.circular(16))),
+    return Theme(
+      data: widget.theme ?? Theme.of(context),
       child: ConstrainedBox(
         constraints: widget.constraints ?? const BoxConstraints.tightFor(),
         child: Padding(
@@ -224,7 +222,7 @@ class _RangePickerDialogState extends State<RangePickerDialog> with SingleTicker
                     }
                   }
 
-                  widget.onSavePressed?.call(_selectedStartDateTime, _selectedEndDateTime);
+                  widget.onSavePressed?.call(_selectedStartDateTime!, _selectedEndDateTime!);
                 },
               ),
             ],

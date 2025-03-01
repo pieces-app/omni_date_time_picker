@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/omni_datetime_picker_bloc.dart';
@@ -43,6 +44,10 @@ class TimePickerSpinner extends StatelessWidget {
   Widget build(BuildContext context) {
     final datetimeBloc = context.read<OmniDatetimePickerBloc>();
 
+    double squeeze = 1.2;
+    double magnification = 1;
+    double height = 130;
+
     return BlocProvider(
       create: (context) => TimePickerSpinnerBloc(
         amText: amText,
@@ -58,8 +63,7 @@ class TimePickerSpinner extends StatelessWidget {
       ),
       child: BlocConsumer<TimePickerSpinnerBloc, TimePickerSpinnerState>(
         listenWhen: (previous, current) {
-          if (previous is TimePickerSpinnerInitial &&
-              current is TimePickerSpinnerLoaded) {
+          if (previous is TimePickerSpinnerInitial && current is TimePickerSpinnerLoaded) {
             return true;
           }
 
@@ -67,11 +71,9 @@ class TimePickerSpinner extends StatelessWidget {
         },
         listener: (context, state) {
           if (state is TimePickerSpinnerLoaded) {
-            datetimeBloc.add(UpdateMinute(
-                minute: int.parse(state.minutes[state.initialMinuteIndex])));
+            datetimeBloc.add(UpdateMinute(minute: int.parse(state.minutes[state.initialMinuteIndex])));
 
-            datetimeBloc.add(UpdateSecond(
-                second: int.parse(state.seconds[state.initialSecondIndex])));
+            datetimeBloc.add(UpdateSecond(second: int.parse(state.seconds[state.initialSecondIndex])));
           }
         },
         builder: (context, state) {
@@ -95,17 +97,11 @@ class TimePickerSpinner extends StatelessWidget {
                       selectionOverlay: selectionOverlay,
                       onSelectedItemChanged: (index) {
                         if (!is24HourMode) {
-                          final hourOffset =
-                              state.abbreviationController.selectedItem == 1
-                                  ? 12
-                                  : 0;
+                          final hourOffset = state.abbreviationController.selectedItem == 1 ? 12 : 0;
 
-                          datetimeBloc.add(UpdateHour(
-                              hour:
-                                  int.parse(state.hours[index]) + hourOffset));
+                          datetimeBloc.add(UpdateHour(hour: int.parse(state.hours[index]) + hourOffset));
                         } else {
-                          datetimeBloc.add(
-                              UpdateHour(hour: int.parse(state.hours[index])));
+                          datetimeBloc.add(UpdateHour(hour: int.parse(state.hours[index])));
                         }
                       },
                       children: List.generate(
@@ -118,7 +114,12 @@ class TimePickerSpinner extends StatelessWidget {
                             hour = hour.padLeft(2, '0');
                           }
 
-                          return Center(child: Text(hour));
+                          return Center(
+                            child: Text(
+                              hour,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -137,8 +138,7 @@ class TimePickerSpinner extends StatelessWidget {
                       looping: looping,
                       selectionOverlay: selectionOverlay,
                       onSelectedItemChanged: (index) {
-                        datetimeBloc.add(UpdateMinute(
-                            minute: int.parse(state.minutes[index])));
+                        datetimeBloc.add(UpdateMinute(minute: int.parse(state.minutes[index])));
                       },
                       children: List.generate(
                         state.minutes.length,
@@ -148,7 +148,12 @@ class TimePickerSpinner extends StatelessWidget {
                           if (isForce2Digits) {
                             minute = minute.padLeft(2, '0');
                           }
-                          return Center(child: Text(minute));
+                          return Center(
+                            child: Text(
+                              minute,
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -168,8 +173,7 @@ class TimePickerSpinner extends StatelessWidget {
                         looping: looping,
                         selectionOverlay: selectionOverlay,
                         onSelectedItemChanged: (index) {
-                          datetimeBloc.add(UpdateSecond(
-                              second: int.parse(state.seconds[index])));
+                          datetimeBloc.add(UpdateSecond(second: int.parse(state.seconds[index])));
                         },
                         children: List.generate(
                           state.seconds.length,
@@ -198,17 +202,19 @@ class TimePickerSpinner extends StatelessWidget {
                         selectionOverlay: selectionOverlay,
                         onSelectedItemChanged: (index) {
                           if (index == 0) {
-                            datetimeBloc
-                                .add(const UpdateAbbreviation(isPm: false));
+                            datetimeBloc.add(const UpdateAbbreviation(isPm: false));
                           } else {
-                            datetimeBloc
-                                .add(const UpdateAbbreviation(isPm: true));
+                            datetimeBloc.add(const UpdateAbbreviation(isPm: true));
                           }
                         },
                         childCount: state.abbreviations.length,
                         itemBuilder: (context, index) {
                           return Center(
-                              child: Text(state.abbreviations[index]));
+                            child: Text(
+                              state.abbreviations[index],
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          );
                         },
                       ),
                     ),

@@ -11,11 +11,11 @@ import 'package:flutter/services.dart';
 
 const Duration _monthScrollDuration = Duration(milliseconds: 200);
 
-const double _dayPickerRowHeight = 42.0;
+const double _dayPickerRowHeight = 40.0;
 const int _maxDayPickerRowCount = 6; // A 31 day month that starts on Saturday.
 // One extra row for the day-of-week header.
 const double _maxDayPickerHeight =
-    _dayPickerRowHeight * (_maxDayPickerRowCount + 1);
+    _dayPickerRowHeight * (_maxDayPickerRowCount);
 const double _monthPickerHorizontalPadding = 8.0;
 
 const int _yearPickerColumnCount = 3;
@@ -401,10 +401,9 @@ class _DatePickerModeToggleButtonState
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final Color controlColor = colorScheme.onSurface.withValues(alpha: 0.60);
+    final Color controlColor = colorScheme.primary;
 
-    return Container(
-      padding: const EdgeInsetsDirectional.only(start: 16, end: 4),
+    return SizedBox(
       height: _subHeaderHeight,
       child: Row(
         children: <Widget>[
@@ -426,7 +425,7 @@ class _DatePickerModeToggleButtonState
                           child: Text(
                             widget.title,
                             overflow: TextOverflow.ellipsis,
-                            style: textTheme.titleSmall?.copyWith(
+                            style: textTheme.labelLarge?.copyWith(
                               color: controlColor,
                             ),
                           ),
@@ -434,7 +433,7 @@ class _DatePickerModeToggleButtonState
                         RotationTransition(
                           turns: _controller,
                           child: Icon(
-                            Icons.arrow_drop_down,
+                            Icons.arrow_drop_down_rounded,
                             color: controlColor,
                           ),
                         ),
@@ -780,19 +779,19 @@ class _MonthPickerState extends State<_MonthPicker> {
   @override
   Widget build(BuildContext context) {
     final Color controlColor =
-        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.60);
+        Theme.of(context).colorScheme.primary;
 
     return Semantics(
       child: Column(
         children: <Widget>[
           Container(
-            padding: const EdgeInsetsDirectional.only(start: 16, end: 4),
+            padding: const EdgeInsetsDirectional.only(start: 4, end: 12),
             height: _subHeaderHeight,
             child: Row(
               children: <Widget>[
                 const Spacer(),
                 IconButton(
-                  icon: const Icon(Icons.chevron_left),
+                  icon: const Icon(Icons.arrow_back),
                   color: controlColor,
                   tooltip: _isDisplayingFirstMonth
                       ? null
@@ -801,7 +800,7 @@ class _MonthPickerState extends State<_MonthPicker> {
                       _isDisplayingFirstMonth ? null : _handlePreviousMonth,
                 ),
                 IconButton(
-                  icon: const Icon(Icons.chevron_right),
+                  icon: const Icon(Icons.arrow_forward),
                   color: controlColor,
                   tooltip: _isDisplayingLastMonth
                       ? null
