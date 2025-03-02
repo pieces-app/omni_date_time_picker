@@ -793,6 +793,7 @@ class _MonthPickerState extends State<_MonthPicker> {
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
                   color: controlColor,
+                  iconSize: 20,
                   tooltip: _isDisplayingFirstMonth
                       ? null
                       : _localizations.previousMonthTooltip,
@@ -802,6 +803,7 @@ class _MonthPickerState extends State<_MonthPicker> {
                 IconButton(
                   icon: const Icon(Icons.arrow_forward),
                   color: controlColor,
+                  iconSize: 20,
                   tooltip: _isDisplayingLastMonth
                       ? null
                       : _localizations.nextMonthTooltip,

@@ -143,6 +143,7 @@ class _OmniDateTimeRangePickerState extends State<OmniDateTimeRangePicker> with 
           padding: widget.padding ?? EdgeInsets.zero,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (widget.title != null) widget.title!,
               if (widget.title != null && widget.titleSeparator != null) widget.titleSeparator!,

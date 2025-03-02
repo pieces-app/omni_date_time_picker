@@ -28,10 +28,12 @@ class RangeTabBar extends StatelessWidget {
       tabs: [
         Tab(
           text: startWidget == null ? localizations.dateRangeStartLabel : null,
+          height: 36,
           child: startWidget,
         ),
         Tab(
           text: endWidget == null ? localizations.dateRangeEndLabel : null,
+          height: 36,
           child: endWidget,
         ),
       ],
